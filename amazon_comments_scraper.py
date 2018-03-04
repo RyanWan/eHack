@@ -20,7 +20,7 @@ def run(search, input_product_ids_filename):
                 reviews = get_comments_with_product_id(product_id)
                 reviews_counter += len(reviews)
                 logging.info('{} reviews found so far.'.format(reviews_counter))
-                persist_comment_to_disk(reviews)
+                #persist_comment_to_disk(reviews)
 
 
 
@@ -34,8 +34,8 @@ def get_script_arguments():
     return search, input_product_ids_filename
 
 
-def main():
-    search, input_product_ids_filename = get_script_arguments()
+def scrapper(input_product_ids_filename, search = '-i'):
+    #search, input_product_ids_filename = get_script_arguments()
     run(search, input_product_ids_filename)
 
 
