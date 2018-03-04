@@ -8,50 +8,138 @@
 
 <head>
     <title>Word Cloud Example</title>
+    <link rel="stylesheet" href="https://rawgit.com/tpreusse/radar-chart-d3/master/src/radar-chart.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <style>
+        body {
+            font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+        }
+        .bld {
+            font-weight: bold;
+        }
+
+        .radar-chart .area {
+          fill-opacity: 0.7;
+        }
+        .radar-chart.focus .area {
+          fill-opacity: 0.3;
+        }
+        .radar-chart .axis .legend{
+          font-size: 20px;
+          font-family: "Impact";
+        }
+        .radar-chart.focus .area.focused {
+          fill-opacity: 0.9;
+        }
+        .area.class, .class .circle {
+          fill: #FFD700;
+          stroke: none;
+        }
+
+        #title, #sub{
+          text-align: center;
+        }
+
+        #title{
+           font-size: 120px;
+           font-weight: bold;
+           font-family: "Impact";
+           margin-bottom: 20px;
+        }
+
+        #sub{
+            margin-top: 0px;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 60px;
+        }
+
+        .textbox{
+          width: 400px;
+          margin:auto;
+        }
+
+
+        #query{
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #search {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+
+
+        #cloud{
+          width: 1000px;
+          margin: auto;
+          margin-top: 200px;
+        }
+
+        #radar{
+          margin-top: 40px;
+          width: 700px;
+          margin: auto;
+        }
+
+        .graphHeader{
+          text-align: center;
+          font-family: 'Roboto Condensed', sans-serif;
+          font-size: 40px;
+        }
+
+
+    </style>
 </head>
-<style>
-    body {
-        font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
-    }
-    .bld {
-        font-weight: bold;
-    }
 
-    .radar-chart .area {
-      fill-opacity: 0.7;
-    }
-    .radar-chart.focus .area {
-      fill-opacity: 0.3;
-    }
-    .radar-chart.focus .area.focused {
-      fill-opacity: 0.9;
-    }
-    .area.germany, .germany .circle {
-      fill: #FFD700;
-      stroke: none;
-    }
-    .area.argentina, .argentina .circle {
-      fill: #ADD8E6;
-      stroke: none;
-    }
 
-</style>
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
-<link rel="stylesheet" href="https://rawgit.com/tpreusse/radar-chart-d3/master/src/radar-chart.css">
+
 <body>
-    <div>
-        <input type="text" id="query"/>
-        <button id="search">search</button>
-        <div id = "cloud"></div>
-        <div id = "radar"></div>
+    <p id="title">
+      Magic Review
+    </p>
+
+    <p id="sub">
+      Smart online review analyst just for you
+    </p>
+
+    <div class = "textbox">
+        <input type="text" id="query" placeholder="Your selected Amazon product URL"/><br>
+        <button id="search">Get review analysis</button>
+    </div>
+
+    <div id = "cloud">
+      <p class = "graphHeader">
+        Word Cloud
+      </p>
+    </div>
+    <div id = "radar">
+        <p class = "graphHeader">
+          Sentiment Analysis
+        </p>
     </div>
 </body>
 <script>
 
 RadarChart.defaultConfig.color = function() {};
 RadarChart.defaultConfig.radius = 3;
-RadarChart.defaultConfig.w = 400;
-RadarChart.defaultConfig.h = 400;
+RadarChart.defaultConfig.w = 700;
+RadarChart.defaultConfig.h = 700;
+
+$('.graphHeader').hide();
 
 
     var frequency_list = [];
@@ -82,6 +170,7 @@ RadarChart.defaultConfig.h = 400;
 
 
     $('#search').on('click',function(){
+        $('.graphHeader').hide();
 
         d3.selectAll("svg").remove();
 
@@ -108,7 +197,7 @@ RadarChart.defaultConfig.h = 400;
             d3.layout.cloud().size([1000, 800])
                 .words(frequency_list)
                 .rotate(0)
-                .padding(5)
+                .padding(10)
                 //.attr("text-anchor", "middle")
                 .rotate(function() { return ((Math.random() * 6) - 3) * 20; })
                 //.rotate(function() { return -90+(Math.random() * 2) * 180; })
@@ -148,7 +237,6 @@ RadarChart.defaultConfig.h = 400;
           result.push(x);
           return result;
           }
-          console.log(randomDataset());
             var chart = RadarChart.chart();
             var cfg = chart.config(); // retrieve default config
             var svg = d3.select('#radar').append('svg')
@@ -156,6 +244,8 @@ RadarChart.defaultConfig.h = 400;
               .attr('height', cfg.h + cfg.h / 4);
             svg.append('g').classed('single', 1).datum(randomDataset()).call(chart);
 
+
+            $('.graphHeader').show();
 
         })
         .fail(function() {
