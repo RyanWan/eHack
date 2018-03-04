@@ -67,13 +67,13 @@ def product(id):
                     continue
 
                 if count <= 8:
-                    frequencies.append({"text": phrase,"size": int(score * 60)})
+                    frequencies.append({"text": phrase,"size": int(score * 80)})
                 elif count <=  40:
-                    frequencies.append({"text": phrase,"size": int(score * 40)})
+                    frequencies.append({"text": phrase,"size": int(score * 50)})
                 elif count <=  70:
-                    frequencies.append({"text": phrase,"size": int(score * 30)})
+                    frequencies.append({"text": phrase,"size": int(score * 40)})
                 elif count <= 100 and score > 0.3:
-                    frequencies.append({"text": phrase,"size": max(15, int(score * 10))})
+                    frequencies.append({"text": phrase,"size": max(20, int(score * 20))})
             count += 1
 
 
