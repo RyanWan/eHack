@@ -69,15 +69,4 @@ def get_comments_with_product_id(product_id):
             f.write(body)
             f.write('\n')
             reviews.append(body)
-
-            # logging.info('***********************************************')
-            # logging.info('TITLE    = ' + title)
-            # logging.info('RATING   = ' + rating)
-            # logging.info('CONTENT  = ' + body)
-            # logging.info('***********************************************\n')
-            # reviews.append({'title': title,
-            #                 'rating': rating,
-            #                 'body': body,
-            #                 'product_id': product_id
-            #                 })
     return reviews

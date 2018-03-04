@@ -91,6 +91,3 @@ def product(id):
 if __name__ == '__main__':
     app.run(debug=True, host='localhost')
     url_for('static', filename='d3.layout.cloud.js')
-    # url_for('static', filename='json/stl_waterareas.geojson"')
-    # url_for('static', filename='json/map.geojson"')
-    # url_for('static', filename='crimedata/input.csv"')

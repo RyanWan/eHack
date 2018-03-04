@@ -1,23 +1,13 @@
-#!/bin/bash
 MODEL=${MODEL:- "models"}
-# RAW_TRAIN is the input of AutoPhrase, where each line is a single document.
 RAW_TRAIN=${RAW_TRAIN:- data/review.txt}
-# When FIRST_RUN is set to 1, AutoPhrase will run all preprocessing. 
-# Otherwise, AutoPhrase directly starts from the current preprocessed data in the tmp/ folder.
 FIRST_RUN=${FIRST_RUN:- 1}
-# When ENABLE_POS_TAGGING is set to 1, AutoPhrase will utilize the POS tagging in the phrase mining. 
-# Otherwise, a simple length penalty mode as the same as SegPhrase will be used.
 ENABLE_POS_TAGGING=${ENABLE_POS_TAGGING:- 1}
-# A hard threshold of raw frequency is specified for frequent phrase mining, which will generate a candidate set.
 MIN_SUP=${MIN_SUP:- 10}
-# You can also specify how many threads can be used for AutoPhrase
 THREAD=${THREAD:- 10}
 
-### Begin: Suggested Parameters ###
 MAX_POSITIVES=-1
 LABEL_METHOD=DPDN
 RAW_LABEL_FILE=${RAW_LABEL_FILE:-""}
-### End: Suggested Parameters ###
 
 green=`tput setaf 2`
 reset=`tput sgr0`
@@ -66,7 +56,7 @@ if [ $FIRST_RUN -eq 1 ]; then
     echo -ne "Current step: Tokenizing wikipedia phrases...\033[0K\n"
     java $TOKENIZER -m test -i $ALL_WIKI_ENTITIES -o $TOKENIZED_ALL -t $TOKEN_MAPPING -c N -thread $THREAD
     java $TOKENIZER -m test -i $QUALITY_WIKI_ENTITIES -o $TOKENIZED_QUALITY -t $TOKEN_MAPPING -c N -thread $THREAD
-fi  
+fi
 ### END Tokenization ###
 
 if [[ $RAW_LABEL_FILE = *[!\ ]* ]]; then
@@ -85,7 +75,6 @@ if [ ! $LANGUAGE == "JA" ] && [ ! $LANGUAGE == "CN" ]  && [ ! $LANGUAGE == "OTHE
     mv tmp/pos_tags.txt tmp/pos_tags_tokenized_train.txt
 fi
 
-### END Part-Of-Speech Tagging ###
 
 echo ${green}===AutoPhrasing===${reset}
 
@@ -113,13 +102,8 @@ cp tmp/segmentation.model ${MODEL}/segmentation.model
 cp tmp/token_mapping.txt ${MODEL}/token_mapping.txt
 cp tmp/language.txt ${MODEL}/language.txt
 
-### END AutoPhrasing ###
 
 echo ${green}===Generating Output===${reset}
 java $TOKENIZER -m translate -i tmp/final_quality_multi-words.txt -o ${MODEL}/AutoPhrase_multi-words.txt -t $TOKEN_MAPPING -c N -thread $THREAD
 java $TOKENIZER -m translate -i tmp/final_quality_unigrams.txt -o ${MODEL}/AutoPhrase_single-word.txt -t $TOKEN_MAPPING -c N -thread $THREAD
 java $TOKENIZER -m translate -i tmp/final_quality_salient.txt -o ${MODEL}/AutoPhrase.txt -t $TOKEN_MAPPING -c N -thread $THREAD
-
-# java $TOKENIZER -m translate -i tmp/distant_training_only_salient.txt -o results/DistantTraning.txt -t $TOKEN_MAPPING -c N -thread $THREAD
-
-### END Generating Output for Checking Quality ###
