@@ -38,20 +38,30 @@ def product(id):
     copyfile(srcComment, desComment+'review.txt')
     #subprocess.call(['../AutoPhrase/auto_phrase.sh'])
     call("./auto_phrase.sh",cwd="../AutoPhrase",shell=True)
-
-
-
-
-
+    copyfile("../AutoPhrase/models/AutoPhrase.txt","phrases/"+fileName)
 
 
     response = {}
+    frequencies = []
 
+    phrase_file = 'phrases/'+fileName
+    with open(phrase_file) as fp:  
+        lines = fp.readlines()
+        for line in lines:
+            lineContent = line.split()
+            if len(lineContent) >= 2:
+                score = float(lineContent[0])
+                separator = " "
+                phrase = separator.join(lineContent[1:])
 
+                if score >= 0.75:
+                    frequencies.append({"text": phrase,"size": int(score * 100)})
+                elif score >= 0.5:
+                    frequencies.append({"text": phrase,"size": int(score * 50)})
+                elif score >= 0.1:
+                    frequencies.append({"text": phrase,"size": int(score * 10)})
 
-
-
-
+    response['frequency'] =  frequencies
 
     return jsonify(response)
 
