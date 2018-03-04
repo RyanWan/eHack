@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>My First JavaScript</h2>
+
+<script>
+
+
+var regex= /(?:dp\/)[A-Z0-9]+(?:\/)/gi;
+var str = "https://www.amazon.com/Amazon-Fire-TV-Stick-With-Alexa-Voice-Remote-Streaming-Media-Player/dp/B00ZV9RDKK/ref=br_msw_pdt-2?_encoding=UTF8&smid=ATVPDKIKX0DER&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=6Q0JDWCP7XWC7QK19VK6&pf_rd_t=36701&pf_rd_p=60c4776a-4178-4e76-81d3-5620b07a5e78&pf_rd_i=desktop";
+var id = "";
+id = str.match(regex)[0];
+var len = id.length;
+id = id.substring(3,len-1);
+console.log(id);
+
+</script>
+</body>
+</html>
