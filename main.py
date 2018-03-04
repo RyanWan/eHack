@@ -49,37 +49,39 @@ def product(id):
     frequencies = []
 
     phrase_file = 'phrases/'+fileName
-    with open(phrase_file) as fp:  
+    with open(phrase_file) as fp:
         lines = fp.readlines()
 
         count = 0
 
         for line in lines:
-            if count > 50:
+            if count > 100:
                 break
             lineContent = line.split()
             if len(lineContent) >= 2:
                 score = float(lineContent[0])
                 separator = " "
                 phrase = separator.join(lineContent[1:])
-                
+
                 if score == 1:
                     continue
 
-                if count <= 5:
-                    frequencies.append({"text": phrase,"size": int(score * 50)})
-                elif count <=  20:
-                    frequencies.append({"text": phrase,"size": int(score * 20)})
-                elif count <= 50 and score > 0.3:
-                    frequencies.append({"text": phrase,"size": max(20, int(score * 10))})
+                if count <= 8:
+                    frequencies.append({"text": phrase,"size": int(score * 60)})
+                elif count <=  40:
+                    frequencies.append({"text": phrase,"size": int(score * 40)})
+                elif count <=  70:
+                    frequencies.append({"text": phrase,"size": int(score * 30)})
+                elif count <= 100 and score > 0.3:
+                    frequencies.append({"text": phrase,"size": max(15, int(score * 10))})
             count += 1
-            
+
 
     senti = getSentiment(id)
 
     response['frequency'] =  frequencies
     response['sentiment'] = senti
-    
+
 
     return jsonify(response)
 
@@ -92,9 +94,3 @@ if __name__ == '__main__':
     # url_for('static', filename='json/stl_waterareas.geojson"')
     # url_for('static', filename='json/map.geojson"')
     # url_for('static', filename='crimedata/input.csv"')
-
-
-
-
-
-
