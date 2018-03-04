@@ -1,6 +1,11 @@
 from flask import Flask, jsonify,render_template,url_for
 from amazon_comments_scraper import scrapper
 from sentiment import getSentiment
+import os.path
+import os
+from shutil import copyfile
+
+from subprocess import call
 
 
 app = Flask(__name__)
@@ -15,38 +20,37 @@ def main():
 @app.route('/product/<id>', methods=['GET'])
 def product(id):
 
-    f = open('id.txt','w')
-    f.write(id)
-    f.close()
+    fileName = id + ".txt"
+    srcComment = "comments/" + fileName
+    # if this already been search, load the cache
+    if os.path.exists(srcComment)  == True:
+        print("loading cache")
+    else:
+        f = open('id.txt','w')
+        f.write(id)
+        f.close()
 
-    scrapper('id.txt')
-    print('********** scrapping finished *************')
+        scrapper('id.txt')
+        print('********** scrapping finished *************')
+
+    # move the review to the autophrase directory
+    desComment = "../AutoPhrase/data/"
+    copyfile(srcComment, desComment+'review.txt')
+    #subprocess.call(['../AutoPhrase/auto_phrase.sh'])
+    call("./auto_phrase.sh",cwd="../AutoPhrase",shell=True)
+
+
+
+
+
+
 
     response = {}
 
 
-   
 
-    #response['sentiment'] = senti
-    
-    # words = []
 
-    # for p in ret:
-    #     tmp = {}
-    #     tmp['x'] = p[0]
-    #     tmp['y'] = p[1]
-    #     tmpType = int(p[2])
-    #     types[tmpType-1] += 1
-    #     tmp['type'] = tmpType;
-    #     tmp['pi'] = float(p[3])
-    #     piSum += float(p[3])
-    #     particles.append(tmp)
 
-    # response['typeCount'] = types
-    # response['maxPercent'] = max(types) * 1.0 / sum(types)
-    # response['pi'] = piSum/sum(types)
-    # response['maxType'] = types.index(max(types)) + 1
-    # response['particles'] = particles
 
 
     return jsonify(response)
