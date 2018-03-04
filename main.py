@@ -1,5 +1,6 @@
 from flask import Flask, jsonify,render_template,url_for
 from amazon_comments_scraper import scrapper
+from sentiment import getSentiment
 
 
 app = Flask(__name__)
@@ -22,6 +23,12 @@ def product(id):
     print('********** scrapping finished *************')
 
     response = {}
+
+
+   
+
+    #response['sentiment'] = senti
+    
     # words = []
 
     # for p in ret:
@@ -42,12 +49,15 @@ def product(id):
     # response['particles'] = particles
 
 
-    return jsonify({'result':'success'})
+    return jsonify(response)
 
-@app.route('/clear', methods=['GET'])
-def clear():
-    eng.clearParticle(nargout=0)
-    return jsonify({"success":True})
+
+@app.route('/sentiment', methods=['GET'])
+def sentiment():
+    senti = getSentiment()
+    return senti
+
+
 
 
 if __name__ == '__main__':
