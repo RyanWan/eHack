@@ -1,5 +1,5 @@
 #!/bin/bash
-MODEL=${MODEL:- "models/review"}
+MODEL=${MODEL:- "models"}
 # RAW_TRAIN is the input of AutoPhrase, where each line is a single document.
 RAW_TRAIN=${RAW_TRAIN:- data/review.txt}
 # When FIRST_RUN is set to 1, AutoPhrase will run all preprocessing. 
