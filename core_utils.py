@@ -77,7 +77,8 @@ def get_soup(url):
     assert out.status_code == 200
     soup = BeautifulSoup(out.content, 'html.parser')
     if 'captcha' in str(soup):
-        raise BannedException('Your bot has been detected. Please wait a while.')
+        print('Your bot has been detected. Please wait a while.')
+        #raise BannedException('Your bot has been detected. Please wait a while.')
     return soup
 
 

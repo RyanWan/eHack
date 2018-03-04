@@ -40,7 +40,7 @@ def get_comments_with_product_id(product_id):
     if not re.match('^[A-Z0-9]{10}$', product_id):
         return reviews
 
-    f = open('comments/review.txt','w')
+    f = open('comments/'+product_id+'.txt','w')
 
     for page_number in range(100):
 

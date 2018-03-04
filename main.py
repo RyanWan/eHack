@@ -1,5 +1,5 @@
 from flask import Flask, jsonify,render_template,url_for
-
+from amazon_comments_scraper import scrapper
 
 
 app = Flask(__name__)
@@ -12,36 +12,37 @@ def main():
 
 
 @app.route('/product/<id>', methods=['GET'])
-def click(id):
-    ret = eng.predict(int(id))
+def product(id):
 
+    f = open('id.txt','w')
+    f.write(id)
+    f.close()
+
+    scrapper('id.txt')
+    print('********** scrapping finished *************')
 
     response = {}
-    particles = []
-    types = [0] * 8
+    # words = []
 
-    piSum = 0.0
+    # for p in ret:
+    #     tmp = {}
+    #     tmp['x'] = p[0]
+    #     tmp['y'] = p[1]
+    #     tmpType = int(p[2])
+    #     types[tmpType-1] += 1
+    #     tmp['type'] = tmpType;
+    #     tmp['pi'] = float(p[3])
+    #     piSum += float(p[3])
+    #     particles.append(tmp)
 
-
-    for p in ret:
-        tmp = {}
-        tmp['x'] = p[0]
-        tmp['y'] = p[1]
-        tmpType = int(p[2])
-        types[tmpType-1] += 1
-        tmp['type'] = tmpType;
-        tmp['pi'] = float(p[3])
-        piSum += float(p[3])
-        particles.append(tmp)
-
-    response['typeCount'] = types
-    response['maxPercent'] = max(types) * 1.0 / sum(types)
-    response['pi'] = piSum/sum(types)
-    response['maxType'] = types.index(max(types)) + 1
-    response['particles'] = particles
+    # response['typeCount'] = types
+    # response['maxPercent'] = max(types) * 1.0 / sum(types)
+    # response['pi'] = piSum/sum(types)
+    # response['maxType'] = types.index(max(types)) + 1
+    # response['particles'] = particles
 
 
-    return jsonify(response)
+    return jsonify({'result':'success'})
 
 @app.route('/clear', methods=['GET'])
 def clear():
