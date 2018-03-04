@@ -65,15 +65,13 @@ def product(id):
                 elif score >= 0.4:
                     frequencies.append({"text": phrase,"size": int(score * 20)})
 
+    senti = getSentiment(id)
+
     response['frequency'] =  frequencies
+    response['sentiment'] = senti
+    
 
     return jsonify(response)
-
-
-@app.route('/sentiment', methods=['GET'])
-def sentiment():
-    senti = getSentiment()
-    return senti
 
 
 

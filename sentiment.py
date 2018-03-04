@@ -3,9 +3,9 @@ from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 \
   import Features, EmotionOptions,EntitiesOptions, KeywordsOptions
 
-def getSentiment():
+def getSentiment(id):
 
-  file = open("review.txt","r")
+  file = open("comments/"+id+".txt","r")
   text = file.read()
   file.close()
 
