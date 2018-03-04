@@ -47,6 +47,10 @@ def product(id):
     phrase_file = 'phrases/'+fileName
     with open(phrase_file) as fp:  
         lines = fp.readlines()
+
+        if len(lines) > 50:
+            lines = lines[:50]
+
         for line in lines:
             lineContent = line.split()
             if len(lineContent) >= 2:
@@ -58,8 +62,8 @@ def product(id):
                     frequencies.append({"text": phrase,"size": int(score * 100)})
                 elif score >= 0.5:
                     frequencies.append({"text": phrase,"size": int(score * 50)})
-                elif score >= 0.1:
-                    frequencies.append({"text": phrase,"size": int(score * 10)})
+                elif score >= 0.4:
+                    frequencies.append({"text": phrase,"size": int(score * 20)})
 
     response['frequency'] =  frequencies
 
