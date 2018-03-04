@@ -22,23 +22,27 @@ def product(id):
 
     fileName = id + ".txt"
     srcComment = "comments/" + fileName
+    srcPhrase  = "phrases/" + fileName
     # if this already been search, load the cache
-    if os.path.exists(srcComment)  == True:
-        print("loading cache")
+    if os.path.exists(srcPhrase) == True:
+        print("loading cache of phrase")
     else:
-        f = open('id.txt','w')
-        f.write(id)
-        f.close()
+        if os.path.exists(srcComment)  == True:
+            print("loading cache of text")
+        else:
+            f = open('id.txt','w')
+            f.write(id)
+            f.close()
 
-        scrapper('id.txt')
-        print('********** scrapping finished *************')
+            scrapper('id.txt')
+            print('********** scrapping finished *************')
 
-    # move the review to the autophrase directory
-    desComment = "../AutoPhrase/data/"
-    copyfile(srcComment, desComment+'review.txt')
-    #subprocess.call(['../AutoPhrase/auto_phrase.sh'])
-    call("./auto_phrase.sh",cwd="../AutoPhrase",shell=True)
-    copyfile("../AutoPhrase/models/AutoPhrase.txt","phrases/"+fileName)
+        # move the review to the autophrase directory
+        desComment = "../AutoPhrase/data/"
+        copyfile(srcComment, desComment+'review.txt')
+        #subprocess.call(['../AutoPhrase/auto_phrase.sh'])
+        call("./auto_phrase.sh",cwd="../AutoPhrase",shell=True)
+        copyfile("../AutoPhrase/models/AutoPhrase.txt","phrases/"+fileName)
 
 
     response = {}
@@ -48,22 +52,28 @@ def product(id):
     with open(phrase_file) as fp:  
         lines = fp.readlines()
 
-        if len(lines) > 50:
-            lines = lines[:50]
+        count = 0
 
         for line in lines:
+            if count > 50:
+                break
             lineContent = line.split()
             if len(lineContent) >= 2:
                 score = float(lineContent[0])
                 separator = " "
                 phrase = separator.join(lineContent[1:])
+                
+                if score == 1:
+                    continue
 
-                if score >= 0.75:
-                    frequencies.append({"text": phrase,"size": int(score * 100)})
-                elif score >= 0.5:
+                if count <= 5:
                     frequencies.append({"text": phrase,"size": int(score * 50)})
-                elif score >= 0.4:
+                elif count <=  20:
                     frequencies.append({"text": phrase,"size": int(score * 20)})
+                elif count <= 50 and score > 0.3:
+                    frequencies.append({"text": phrase,"size": max(20, int(score * 10))})
+            count += 1
+            
 
     senti = getSentiment(id)
 

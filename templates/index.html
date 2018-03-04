@@ -71,6 +71,9 @@ RadarChart.defaultConfig.h = 400;
                 .enter().append("text")
                 .style("font-size", function(d) { return d.size + "px"; })
                 .style("fill", function(d, i) { return color(i); })
+                .style("padding",15)
+                .style('font-family','Impact')
+                .attr("text-anchor", "middle")
                 .attr("transform", function(d) {
                     return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
                 })
@@ -79,6 +82,9 @@ RadarChart.defaultConfig.h = 400;
 
 
     $('#search').on('click',function(){
+      
+        d3.selectAll("svg").remove();
+
       
         var regex= /(?:dp\/)[A-Z0-9]+(?:\/)/gi;
         var searchString = $('#query').val();
@@ -93,6 +99,8 @@ RadarChart.defaultConfig.h = 400;
             dataType: "json"
         })
         .done(function(res) {
+          
+
         
             frequency_list = res['frequency'];
         
